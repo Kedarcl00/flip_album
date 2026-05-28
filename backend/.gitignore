@@ -1,0 +1,9 @@
+.env
+node_modules
+dist
+coverage
+logs
+*.log
+*.tmp
+.DS_Store
+.idea
