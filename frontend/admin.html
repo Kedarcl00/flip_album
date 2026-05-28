@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Album Admin</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    min-height:100vh;
+
+    background:
+    linear-gradient(
+        135deg,
+        #0f172a,
+        #1e293b,
+        #111827
+    );
+
+    padding:40px;
+
+    color:white;
+}
+
+.admin-box{
+
+    text-align:center;
+
+    color:white;
+
+}
+
+button{
+
+    padding:15px 30px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#ff4757;
+
+    color:white;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+}
+
+
+.admin-wrapper{
+
+    max-width:1200px;
+
+    margin:auto;
+}
+
+.heading{
+
+    text-align:center;
+
+    font-size:42px;
+
+    margin-bottom:40px;
+}
+
+.upload-section{
+
+    background:
+    rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(12px);
+
+    border-radius:20px;
+
+    padding:30px;
+
+    margin-bottom:40px;
+
+    box-shadow:
+    0 10px 40px rgba(0,0,0,0.3);
+}
+
+.upload-section input{
+
+    width:100%;
+
+    margin-bottom:20px;
+
+    color:white;
+}
+
+.upload-btn{
+
+    padding:14px 25px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:white;
+
+    color:black;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+.upload-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 10px 20px rgba(0,0,0,0.3);
+}
+
+.image-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+
+    gap:25px;
+}
+
+.card{
+
+    background:white;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    position:relative;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,0.3);
+}
+
+.card img{
+
+    width:100%;
+    height:250px;
+
+    object-fit:cover;
+}
+
+.delete-btn{
+
+    position:absolute;
+
+    top:12px;
+    right:12px;
+
+    width:40px;
+    height:40px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:red;
+
+    color:white;
+
+    font-size:18px;
+
+    cursor:pointer;
+}
+
+.open-site{
+
+    display:inline-block;
+
+    margin-top:40px;
+
+    padding:14px 22px;
+
+    border-radius:12px;
+
+    background:white;
+
+    color:black;
+
+    text-decoration:none;
+
+    font-weight:600;
+}
+
+/* =========================
+   UPLOAD LAYOUT
+========================= */
+
+.upload-layout{
+
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    gap:30px;
+
+    margin-bottom:40px;
+}
+
+/* =========================
+   PREVIEW SECTION
+========================= */
+
+.preview-section{
+
+    background:
+    rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(12px);
+
+    border-radius:20px;
+
+    padding:25px;
+
+    max-height:600px;
+
+    overflow:auto;
+
+    box-shadow:
+    0 10px 40px rgba(0,0,0,0.3);
+}
+
+.preview-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+}
+
+/* =========================
+   PREVIEW CARD
+========================= */
+
+.preview-card{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:12px;
+
+    color:black;
+
+    box-shadow:
+    0 5px 15px rgba(0,0,0,0.15);
+}
+
+.preview-card img{
+
+    width:90px;
+    height:90px;
+
+    object-fit:cover;
+
+    border-radius:12px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="admin-box">
+
+    <h1>Welcome Admin</h1>
+
+    <button onclick="logout()">
+
+    Logout
+
+    </button>
+
+</div>
+
+
+<div class="admin-wrapper">
+
+    <h1 class="heading">
+        Flipbook Admin
+    </h1>
+<input
+type="text"
+id="albumName"
+placeholder="Album Name"
+/>
+    <div class="upload-layout">
+
+    <!-- LEFT SIDE -->
+        
+    <div class="upload-section">
+
+        <h2>Select Images</h2>
+
+        <input
+        type="file"
+        id="imageInput"
+        multiple
+        accept="image/*">
+
+        <button
+        class="upload-btn"
+        id="uploadBtn">
+
+            Upload Arranged Images
+
+        </button>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+
+    <div class="preview-section">
+
+        <h2>Arrange Pages</h2>
+
+        <div
+        class="preview-list"
+        id="previewList"></div>
+
+    </div>
+
+    </div>
+
+    <div
+    class="image-grid"
+    id="gallery"></div>
+
+    <a
+    href="index.html"
+    class="open-site">
+
+        Open Flipbook
+
+    </a>
+
+</div>
+
+<script>
+
+const token =
+localStorage.getItem("token");
+
+if(!token){
+
+    window.location.href = "login.html";
+
+}
+
+const uploadBtn =
+document.getElementById("uploadBtn");
+
+const imageInput =
+document.getElementById("imageInput");
+
+const gallery =
+document.getElementById("gallery");
+
+const previewList =
+document.getElementById("previewList");
+
+/* =========================
+   STORE SELECTED FILES
+========================= */
+
+let selectedFiles = [];
+
+/* =========================
+   IMAGE SELECT
+========================= */
+
+imageInput.addEventListener(
+"change",
+
+(e)=>{
+
+    selectedFiles =
+    Array.from(e.target.files);
+
+    renderPreview();
+
+});
+
+/* =========================
+   RENDER PREVIEW
+========================= */
+
+function renderPreview(){
+
+    previewList.innerHTML = "";
+
+    selectedFiles.forEach((file,index)=>{
+
+        const reader =
+        new FileReader();
+
+        reader.onload =
+        function(e){
+
+            const card =
+            document.createElement("div");
+
+            card.className =
+            "preview-card";
+
+            card.innerHTML = `
+
+                <img src="${e.target.result}">
+
+                <div class="preview-info">
+
+                    <div class="order-number">
+
+                        Page ${index + 1}
+
+                    </div>
+
+                    <p>${file.name}</p>
+
+                    <div class="control-buttons">
+
+                        <button
+                        class="up-btn"
+                        onclick="moveUp(${index})">
+
+                            ↑ Up
+
+                        </button>
+
+                        <button
+                        class="down-btn"
+                        onclick="moveDown(${index})">
+
+                            ↓ Down
+
+                        </button>
+
+                        <button
+                        class="remove-btn"
+                        onclick="removeImage(${index})">
+
+                            ✖ Remove
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+            previewList.appendChild(card);
+
+        };
+
+        reader.readAsDataURL(file);
+
+    });
+
+}
+
+/* =========================
+   MOVE IMAGE UP
+========================= */
+
+function moveUp(index){
+
+    if(index === 0) return;
+
+    [
+        selectedFiles[index - 1],
+        selectedFiles[index]
+    ] = [
+
+        selectedFiles[index],
+        selectedFiles[index - 1]
+
+    ];
+
+    renderPreview();
+
+}
+
+/* =========================
+   MOVE IMAGE DOWN
+========================= */
+
+function moveDown(index){
+
+    if(
+        index ===
+        selectedFiles.length - 1
+    ) return;
+
+    [
+        selectedFiles[index + 1],
+        selectedFiles[index]
+    ] = [
+
+        selectedFiles[index],
+        selectedFiles[index + 1]
+
+    ];
+
+    renderPreview();
+
+}
+
+/* =========================
+   REMOVE IMAGE
+========================= */
+
+function removeImage(index){
+
+    selectedFiles.splice(index,1);
+
+    renderPreview();
+
+}
+
+/* =========================
+   FETCH EXISTING IMAGES
+========================= */
+
+async function fetchImages(){
+
+    try{
+
+        const response =
+        await fetch(
+        "http://localhost:3000/api/upload"
+        );
+
+        const data =
+        await response.json();
+
+        gallery.innerHTML = "";
+
+        data.forEach((img)=>{
+
+            createCard(
+                img.imageUrl
+            );
+
+        });
+
+    }catch(error){
+
+        console.log(error);
+
+    }
+
+}
+
+/* =========================
+   CREATE GALLERY CARD
+========================= */
+
+function createCard(url){
+
+    const card =
+    document.createElement("div");
+
+    card.className = "card";
+
+    card.innerHTML = `
+
+        <button class="delete-btn">
+
+            ✖
+
+        </button>
+
+        <img src="${url}">
+
+    `;
+
+    gallery.appendChild(card);
+
+}
+
+/* =========================
+   UPLOAD IMAGES
+========================= */
+
+uploadBtn.addEventListener(
+"click",
+
+async()=>{
+
+    if(selectedFiles.length === 0){
+
+        alert("Select Images First");
+
+        return;
+    }
+
+    for(let [index,file] of selectedFiles.entries()){
+
+        const formData =
+        new FormData();
+
+        /* SEND IMAGE */
+
+        formData.append(
+            "image",
+            file
+        );
+
+        /* SEND ORDER */
+
+        formData.append(
+            "order",
+            index
+        );
+
+        try{
+
+            const response =
+            await fetch(
+
+            "http://localhost:3000/api/upload",
+
+            {
+                method:"POST",
+
+                body:formData
+            });
+
+            const data =
+            await response.json();
+
+            createCard(
+                data.image.imageUrl
+            );
+
+        }catch(error){
+
+            console.log(error);
+
+        }
+
+    }
+
+    alert(
+    "Images Uploaded Successfully"
+    );
+
+    selectedFiles = [];
+
+    previewList.innerHTML = "";
+
+    imageInput.value = "";
+
+});
+
+/* =========================
+   LOAD SAVED IMAGES
+========================= */
+
+fetchImages();
+
+/* =========================
+   LOGOUT FUNCTION
+========================= */
+function logout(){
+
+    localStorage.removeItem("token");
+
+    window.location.href =
+    "login.html";
+
+}
+
+</script>
+
+</body>
+</html>

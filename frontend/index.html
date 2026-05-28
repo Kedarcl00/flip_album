@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Advanced StPageFlip Book</title>
+
+<!-- StPageFlip Library -->
+<script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
+
+<link rel="stylesheet" href="style.css">
+<!-- Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+</style>
+</head>
+
+<body style="
+background:
+linear-gradient(
+rgba(0,0,0,0.4),
+rgba(0,0,0,0.4)
+),
+url('sounds/DSC_5323.JPG');
+
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+">    
+
+<div class="wrapper">
+
+    <!-- TOOLBAR -->
+
+    <div class="toolbar">
+
+        <button id="prevBtn">⬅ Prev</button>
+
+        <button id="nextBtn">Next ➡</button>
+
+        <button id="fullscreenBtn">⛶ Fullscreen</button>
+
+       
+
+    </div>
+
+    <!-- BOOK -->
+
+    <div class="book-container" id="bookContainer">
+
+        <div id="book">
+
+
+            <!-- COVER -->
+
+            
+        </div>
+
+    </div>
+
+</div>
+
+<!-- FLIP SOUND -->
+
+<audio id="flipSound">
+    <source src="sounds/freesound_community-pageturn-102978.mp3" type="audio/mpeg">
+</audio>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
