@@ -131,7 +131,7 @@ async function loadImages(){
 
         const response =
         await fetch(
-            "http://localhost:3000/api/images"
+            "https://tirthas-bday.onrender.com/api/images"
         );
 
         const data =
