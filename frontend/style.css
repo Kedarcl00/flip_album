@@ -6,6 +6,7 @@
 
 body{
     
+    
     height:100vh;
     overflow:hidden;
     font-family:'Poppins',sans-serif;
@@ -147,7 +148,6 @@ body{
     position:relative;
     z-index:1; /* Keep image above background */
 }
-
 
 
 
