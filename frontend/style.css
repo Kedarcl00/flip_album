@@ -107,32 +107,61 @@ body{
 
 /* PAGE */
 
-.page{
 
+
+
+.page{
     width:100%;
     height:100%;
-
-    background:white;
-
-    overflow:hidden;
-
+    display:flex;
+    justify-content:center;
+    align-items:center;
     position:relative;
-
+    overflow:hidden;
     border-radius:10px;
 }
 
-/* PAGE IMAGE */
-
-.page img{
+/* Background Image */
+.page::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
     width:100%;
     height:100%;
-    object-fit:cover;
+
+    background-image:url("images/background.jpg");
+    background-size:cover;
+    background-position:center;
+
+    opacity:0.6; /* 60% transparency */
+    z-index:0;
 }
+
+/* Image on page */
+.page img{
+    width:90%;
+    height:90%;
+    object-fit:contain;
+    display:block;
+    position:relative;
+    z-index:1; /* Keep image above background */
+}
+
+
+
+
 
 /* PAGE CONTENT */
 
 .page-content{
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 
+    
     padding:50px;
 
     height:100%;
