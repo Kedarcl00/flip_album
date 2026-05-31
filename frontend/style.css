@@ -168,6 +168,7 @@ body{
 
 
 
+
 /* PAGE CONTENT */
 
 .page-content{
@@ -211,17 +212,20 @@ body{
 
 /* PAGE NUMBER */
 
-.page-number{
+#pageCounter{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
 
-    position:absolute;
+    background:rgba(0,0,0,0.7);
+    color:white;
 
-    bottom:15px;
-    right:25px;
+    padding:8px 15px;
+    border-radius:20px;
 
     font-size:14px;
-    font-weight:600;
-
-    color:#6b7280;
+    z-index:1000;
 }
 
 /* BOOKMARK */

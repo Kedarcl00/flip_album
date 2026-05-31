@@ -213,6 +213,20 @@ async function loadImages(){
 
 }
 
+pageFlip.on("flip", (e) => {
+
+    const currentPage =
+    e.data + 1;
+
+    const totalPages =
+    pageFlip.getPageCount();
+
+    document.getElementById(
+        "pageCounter"
+    ).textContent =
+    `Memory ${currentPage} of ${totalPages}`;
+
+});
 
 
 /* =========================
