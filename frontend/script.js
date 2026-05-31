@@ -26,6 +26,8 @@ const timer = setInterval(() => {
     }
 
 }, 25);
+
+
 /* =========================
    PAGE FLIP INITIALIZATION
 ========================= */
