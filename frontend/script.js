@@ -1,3 +1,31 @@
+let progress = 0;
+
+const percentage =
+document.getElementById("percentage");
+
+const loader =
+document.getElementById("loader");
+
+const flipbook =
+document.getElementById("flipbook");
+
+const timer = setInterval(() => {
+
+    progress++;
+
+    percentage.textContent =
+    progress + "%";
+
+    if(progress >= 100){
+
+        clearInterval(timer);
+
+        loader.style.display = "none";
+
+        flipbook.style.display = "block";
+    }
+
+}, 25);
 /* =========================
    PAGE FLIP INITIALIZATION
 ========================= */
