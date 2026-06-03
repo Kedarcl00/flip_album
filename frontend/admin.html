@@ -429,74 +429,58 @@ function renderPreview(){
 
     selectedFiles.forEach((file,index)=>{
 
-        const reader =
-        new FileReader();
+        const card =
+        document.createElement("div");
 
-        reader.onload =
-        function(e){
+        card.className =
+        "preview-card";
 
-            const card =
-            document.createElement("div");
+        const imageURL =
+        URL.createObjectURL(file);
 
-            card.className =
-            "preview-card";
+        card.innerHTML = `
 
-            card.innerHTML = `
+            <img src="${imageURL}">
 
-                <img src="${e.target.result}">
+            <div class="preview-info">
 
-                <div class="preview-info">
+                <div class="order-number">
+                    Page ${index + 1}
+                </div>
 
-                    <div class="order-number">
+                <p>${file.name}</p>
 
-                        Page ${index + 1}
+                <div class="control-buttons">
 
-                    </div>
+                    <button
+                    class="up-btn"
+                    onclick="moveUp(${index})">
+                        ↑ Up
+                    </button>
 
-                    <p>${file.name}</p>
+                    <button
+                    class="down-btn"
+                    onclick="moveDown(${index})">
+                        ↓ Down
+                    </button>
 
-                    <div class="control-buttons">
-
-                        <button
-                        class="up-btn"
-                        onclick="moveUp(${index})">
-
-                            ↑ Up
-
-                        </button>
-
-                        <button
-                        class="down-btn"
-                        onclick="moveDown(${index})">
-
-                            ↓ Down
-
-                        </button>
-
-                        <button
-                        class="remove-btn"
-                        onclick="removeImage(${index})">
-
-                            ✖ Remove
-
-                        </button>
-
-                    </div>
+                    <button
+                    class="remove-btn"
+                    onclick="removeImage(${index})">
+                        ✖ Remove
+                    </button>
 
                 </div>
 
-            `;
+            </div>
 
-            previewList.appendChild(card);
+        `;
 
-        };
-
-        reader.readAsDataURL(file);
+        previewList.appendChild(card);
 
     });
 
 }
-
 /* =========================
    MOVE IMAGE UP
 ========================= */
