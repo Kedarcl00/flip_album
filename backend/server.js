@@ -57,12 +57,23 @@ const MONGO_URI = process.env.MONGO_URI;
 if (!MONGO_URI) {
     console.error("WARNING: MONGO_URI environment variable is not defined in environment variables!");
 } else {
-    mongoose.connect(MONGO_URI)
+    // Warn if connection string has unencoded '@' in password
+    const atCount = (MONGO_URI.match(/@/g) || []).length;
+    if (atCount > 1) {
+        console.warn("WARNING: MONGO_URI contains multiple '@' characters. If your MongoDB password contains an '@', you MUST URL-encode it as '%40' in your connection string!");
+    }
+
+    mongoose.connect(MONGO_URI, {
+        serverSelectionTimeoutMS: 5000
+    })
         .then(() => {
             console.log("MongoDB Connected successfully");
         })
         .catch((error) => {
             console.error("MongoDB Connection Error:", error.message);
+            if (error.message.includes("bad auth")) {
+                console.error("-> Authentication failed: Check your MongoDB Atlas Database Username and Password. If your password has special characters like '@', ensure they are URL-encoded (e.g. '@' -> '%40').");
+            }
         });
 }
 
