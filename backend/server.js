@@ -1,119 +1,76 @@
 require("dotenv").config();
 
 const express = require("express");
-
 const cors = require("cors");
-
-
 const mongoose = require("mongoose");
 
 const authRoutes = require("./routes/authRoutes");
+const uploadRoutes = require("./routes/upload");
 const auth = require("./middleware/auth");
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
-
-app.use("/api/auth", authRoutes);
-
-
-console.log(process.env.JWT_SECRET);
-
-console.log(process.env.ADMIN_PASSWORD);
 /* =========================
-   PROTECTED ROUTE
+   MIDDLEWARE & CORS
 ========================= */
-
-app.get("/api/admin", auth, (req, res) => {
-
-    res.json({
-        success:true,
-        message:"Welcome Admin"
-    });
-
-});
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-
-    console.log(
-        `Server Running On Port ${PORT}`
-    );
-
-});
-
-/* CLOUDINARY */
-
-const cloudinary =
-require("cloudinary").v2;
-
-/* ROUTE FILE */
-
-const uploadRoutes =
-require("./routes/upload");
-
-
-
-/* =========================
-   CLOUDINARY CONFIG
-========================= */
-
-cloudinary.config({
-
-    cloud_name:
-    process.env.CLOUDINARY_CLOUD_NAME,
-
-    api_key:
-    process.env.CLOUDINARY_API_KEY,
-
-    api_secret:
-    process.env.CLOUDINARY_API_SECRET
-
-});
-
-/* =========================
-   MIDDLEWARE
-========================= */
-
-app.use(cors());
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+/* =========================
+   HEALTH CHECK / ROOT
+========================= */
+app.get("/", (req, res) => {
+    res.send("Flip Album Backend is running");
+});
+
+app.get("/health", (req, res) => {
+    res.status(200).json({ status: "ok" });
+});
 
 /* =========================
    ROUTES
 ========================= */
-
+app.use("/api/auth", authRoutes);
 app.use("/api", uploadRoutes);
+
+/* =========================
+   PROTECTED ROUTE
+========================= */
+app.get("/api/admin", auth, (req, res) => {
+    res.json({
+        success: true,
+        message: "Welcome Admin"
+    });
+});
 
 /* =========================
    MONGODB CONNECTION
 ========================= */
+const MONGO_URI = process.env.MONGO_URI;
 
-mongoose.connect(process.env.MONGO_URI)
-
-.then(()=>{
-
-    console.log("MongoDB Connected");
-
-})
-
-.catch((error)=>{
-
-    console.log(error);
-
-});
+if (!MONGO_URI) {
+    console.error("WARNING: MONGO_URI environment variable is not defined in environment variables!");
+} else {
+    mongoose.connect(MONGO_URI)
+        .then(() => {
+            console.log("MongoDB Connected successfully");
+        })
+        .catch((error) => {
+            console.error("MongoDB Connection Error:", error.message);
+        });
+}
 
 /* =========================
    SERVER
 ========================= */
+const PORT = process.env.PORT || 5000;
 
-app.listen(3000, ()=>{
-
-    console.log(
-    "Server Running on Port 5000"
-    );
-
+app.listen(PORT, () => {
+    console.log(`Server Running On Port ${PORT}`);
 });
-

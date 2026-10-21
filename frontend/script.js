@@ -164,6 +164,10 @@ async function loadImages(){
             "https://tirthas-bday.onrender.com/api/images"
         );
 
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data =
         await response.json();
 
