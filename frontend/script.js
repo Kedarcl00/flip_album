@@ -90,27 +90,50 @@ document
 });
 
 /* =========================
-   SOUND EFFECT
+   SOUND EFFECT & AUDIO UNLOCK
 ========================= */
 
-const flipSound =
-document.getElementById("flipSound");
-
+const flipSound = document.getElementById("flipSound");
+let audioUnlocked = false;
 let isInitialized = false;
 
+// Unlock audio on first user touch/click anywhere (browser autoplay policy)
+function unlockAudio() {
+    if (audioUnlocked) return;
+    flipSound.volume = 0;
+    const p = flipSound.play();
+    if (p !== undefined) {
+        p.then(() => {
+            flipSound.pause();
+            flipSound.currentTime = 0;
+            flipSound.volume = 0.4;
+            audioUnlocked = true;
+        }).catch(() => {});
+    }
+}
+
+document.addEventListener("click", unlockAudio, { once: true });
+document.addEventListener("touchstart", unlockAudio, { once: true });
+document.addEventListener("keydown", unlockAudio, { once: true });
+
+function playFlipSound() {
+    try {
+        flipSound.currentTime = 0;
+        flipSound.volume = 0.4;
+        const playPromise = flipSound.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(() => {
+                // Silently ignore if browser still blocks autoplay
+            });
+        }
+    } catch (e) {
+        // Silently ignore
+    }
+}
+
 pageFlip.on("flip", () => {
-
     if (!isInitialized) return;
-
-    flipSound.currentTime = 0;
-
-    flipSound.volume = 0.4;
-
-    flipSound.play().catch((err) => {
-        // Ignored if browser blocks audio before user interaction
-        console.debug("Audio play blocked by browser policy:", err);
-    });
-
+    playFlipSound();
 });
 
 /* =========================
@@ -223,7 +246,7 @@ async function loadImages(){
         // Enable flip sound after initial render is complete
         setTimeout(() => {
             isInitialized = true;
-        }, 300);
+        }, 1000);
 
     }catch(error){
 
