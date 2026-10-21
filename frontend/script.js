@@ -96,13 +96,20 @@ document
 const flipSound =
 document.getElementById("flipSound");
 
+let isInitialized = false;
+
 pageFlip.on("flip", () => {
+
+    if (!isInitialized) return;
 
     flipSound.currentTime = 0;
 
     flipSound.volume = 0.4;
 
-    flipSound.play();
+    flipSound.play().catch((err) => {
+        // Ignored if browser blocks audio before user interaction
+        console.debug("Audio play blocked by browser policy:", err);
+    });
 
 });
 
@@ -205,6 +212,18 @@ async function loadImages(){
         pageFlip.loadFromHTML(
             document.querySelectorAll(".page")
         );
+
+        const totalPages = pageFlip.getPageCount();
+        if (totalPages > 0) {
+            document.getElementById(
+                "pageCounter"
+            ).textContent = `Memory 1 of ${totalPages}`;
+        }
+
+        // Enable flip sound after initial render is complete
+        setTimeout(() => {
+            isInitialized = true;
+        }, 300);
 
     }catch(error){
 
