@@ -1,36 +1,30 @@
 const jwt = require("jsonwebtoken");
 
 const auth = (req, res, next) => {
+    let token = req.headers.authorization;
 
-    const token = req.headers.authorization;
-
-    if(!token){
-
+    if (!token) {
         return res.status(401).json({
-            success:false,
-            message:"No token found"
+            success: false,
+            message: "Authentication required: No token provided"
         });
-
     }
 
-    try{
+    // Support "Bearer <token>" format
+    if (token.startsWith("Bearer ")) {
+        token = token.slice(7).trim();
+    }
 
-        jwt.verify(
-            token,
-            process.env.JWT_SECRET
-        );
-
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || "default_jwt_secret_flip_album");
+        req.user = decoded;
         next();
-
-    }catch(error){
-
+    } catch (error) {
         return res.status(401).json({
-            success:false,
-            message:"Invalid Token"
+            success: false,
+            message: "Authentication failed: Token is invalid or expired"
         });
-
     }
-
 };
 
 module.exports = auth;

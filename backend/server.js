@@ -5,8 +5,10 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const authRoutes = require("./routes/authRoutes");
+const albumRoutes = require("./routes/albumRoutes");
 const uploadRoutes = require("./routes/upload");
 const auth = require("./middleware/auth");
+const initDb = require("./utils/initDb");
 
 const app = express();
 
@@ -26,26 +28,32 @@ app.use(express.urlencoded({ extended: true }));
    HEALTH CHECK / ROOT
 ========================= */
 app.get("/", (req, res) => {
-    res.send("Flip Album Backend is running");
+    res.send("Multi-Album QR Flip Album Backend is running");
 });
 
 app.get("/health", (req, res) => {
-    res.status(200).json({ status: "ok" });
+    res.status(200).json({
+        status: "ok",
+        service: "flip-album-api",
+        timestamp: new Date().toISOString()
+    });
 });
 
 /* =========================
    ROUTES
 ========================= */
 app.use("/api/auth", authRoutes);
+app.use("/api/albums", albumRoutes);
 app.use("/api", uploadRoutes);
 
 /* =========================
-   PROTECTED ROUTE
+   PROTECTED ROUTE (Legacy check)
 ========================= */
 app.get("/api/admin", auth, (req, res) => {
     res.json({
         success: true,
-        message: "Welcome Admin"
+        message: "Welcome Admin",
+        user: req.user
     });
 });
 
@@ -66,8 +74,10 @@ if (!MONGO_URI) {
     mongoose.connect(MONGO_URI, {
         serverSelectionTimeoutMS: 5000
     })
-        .then(() => {
+        .then(async () => {
             console.log("MongoDB Connected successfully");
+            // Run automatic backward-compatible database migration and seed
+            await initDb();
         })
         .catch((error) => {
             console.error("MongoDB Connection Error:", error.message);

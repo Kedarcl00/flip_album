@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Advanced StPageFlip Book</title>
+<title id="pageTitle">When Tirtha Turns One!</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>">
 
 <!-- StPageFlip Library -->
@@ -12,14 +12,18 @@
 
 <link rel="stylesheet" href="style.css">
 <!-- Font -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-
+/* Dynamic album CSS variables support */
+:root {
+    --primary-color: #ff4757;
+    --font-family: 'Poppins', sans-serif;
+}
 </style>
 </head>
 
-<body style="
+<body id="albumBody" style="
 background:
 linear-gradient(
 rgba(0,0,0,0.7),
@@ -31,62 +35,55 @@ background-size:cover;
 background-position:center;
 ">    
 
+<!-- DYNAMIC LOADER -->
 <div id="loader">
-    <h4> When Tirtha Turns One!</h4>
-    <h5>15April 2026</h5>
+    <h4 id="loaderTitle">When Tirtha Turns One!</h4>
+    <h5 id="loaderSubtitle">15 April 2026</h5>
     <h4></h4>
-    <h2>Loading Memories...</h2>
+    <h2 id="loaderText">Loading Memories...</h2>
     <div id="percentage">0%</div>
+</div>
+
+<!-- NOT FOUND SCREEN -->
+<div id="albumNotFound" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#0f172a; color:white; z-index:10000; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px;">
+    <div style="font-size:60px; margin-bottom:15px;">📖</div>
+    <h1 style="font-size:32px; margin-bottom:12px;">Album Not Found</h1>
+    <p style="color:#94a3b8; margin-bottom:25px; max-width:450px;">The flip album you are looking for does not exist or may have been removed.</p>
+    <a href="/" style="padding:12px 24px; background:#ff4757; color:white; text-decoration:none; border-radius:10px; font-weight:600; transition:0.3s;">Open Default Album</a>
 </div>
 
 <div id="flipbook" style="display:none;">
     <!-- Album Content -->
 </div>
 
-
 <div class="wrapper">
 
-
     <!-- BOOK -->
-
     <div class="book-container" id="bookContainer">
-
         <div id="book">
-
-
-            <!-- COVER -->
-
-            
+            <!-- COVER & PAGES LOADED DYNAMICALLY -->
         </div>
         <div id="pageCounter">
         Page 0 of 0
         </div>
-
     </div>
 
     <!-- TOOLBAR -->
-
     <div class="toolbar">
-
         <button id="prevBtn">⬅ Prev</button>
-
         <button id="fullscreenBtn">⛶ Fullscreen</button>
-
-         <button id="nextBtn">Next ➡</button>
-       
-
+        <button id="nextBtn">Next ➡</button>
     </div>
 
 </div>
 
 <!-- FLIP SOUND -->
-
 <audio id="flipSound">
     <source src="sounds/freesound_community-pageturn-102978.mp3" type="audio/mpeg">
 </audio>
 
-
-<script src="script.js?v=3"></script>
+<script src="config.js"></script>
+<script src="script.js?v=4"></script>
 
 </body>
 </html>
