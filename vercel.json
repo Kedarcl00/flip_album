@@ -1,0 +1,7 @@
+{
+  "outputDirectory": "frontend",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/album/:slug", "destination": "/index.html" }
+  ]
+}
