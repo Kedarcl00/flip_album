@@ -692,14 +692,14 @@ body {
 
 <div id="toast">Message</div>
 
-<script src="config.js"></script>
+<script src="/config.js"></script>
 <script>
 /* =========================================================
    AUTH & SESSION VERIFICATION
 ========================================================= */
 const token = localStorage.getItem("token");
 if (!token) {
-    window.location.href = "login.html";
+    window.location.href = "/login";
 }
 
 const baseUrl = typeof API_BASE_URL !== "undefined" ? API_BASE_URL : "https://tirthas-bday.onrender.com";
@@ -724,7 +724,7 @@ function handleAuthError(res) {
         localStorage.removeItem("token");
         localStorage.removeItem("adminUser");
         alert("Your session has expired. Please log in again.");
-        window.location.href = "login.html";
+        window.location.href = "/login";
         return true;
     }
     return false;
@@ -743,7 +743,7 @@ function showToast(msg, isSuccess = true) {
 function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("adminUser");
-    window.location.href = "login.html";
+    window.location.href = "/login";
 }
 
 /* =========================================================

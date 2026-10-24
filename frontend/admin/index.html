@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flip Album Studio - Multi-Album Admin</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f172a, #1e293b, #111827);
+    color: white;
+    padding: 25px 20px 60px;
+}
+
+/* NAVBAR */
+.navbar {
+    max-width: 1200px;
+    margin: 0 auto 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 16px 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-icon {
+    font-size: 26px;
+}
+
+.brand h1 {
+    font-size: 20px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.admin-badge {
+    font-size: 13px;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+/* BUTTONS */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: #3b82f6;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+}
+
+.btn-success {
+    background: #10b981;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #059669;
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 8px;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* STATS BAR */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.stat-info h3 {
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.stat-info p {
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+/* SECTION HEADER */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.section-title {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+/* ALBUMS GRID */
+.albums-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.album-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.album-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.album-cover {
+    width: 100%;
+    height: 180px;
+    background: #1e293b;
+    position: relative;
+    overflow: hidden;
+}
+
+.album-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.album-cover-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    background: linear-gradient(135deg, #1e293b, #334155);
+}
+
+.album-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    color: #6ee7b7;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+
+.album-body {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.album-name {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.album-desc {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.album-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #cbd5e1;
+    margin-bottom: 18px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.album-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+/* PHOTO MANAGEMENT VIEW */
+#photoManagementView {
+    display: none;
+}
+
+.album-banner {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px 25px;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.upload-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 18px;
+    padding: 35px 20px;
+    text-align: center;
+    margin-bottom: 30px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.upload-box:hover {
+    border-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.05);
+}
+
+.upload-box input[type="file"] {
+    display: none;
+}
+
+.photo-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.photo-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.photo-thumb {
+    width: 100%;
+    height: 180px;
+    background: #111827;
+    position: relative;
+}
+
+.photo-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #0b0f19;
+}
+
+.page-num {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.photo-details {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.caption-input {
+    width: 100%;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: white;
+    font-size: 12px;
+}
+
+.photo-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    max-width: 550px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 30px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    color: #cbd5e1;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    color: white;
+    font-size: 14px;
+    outline: none;
+}
+
+.form-control:focus {
+    border-color: #3b82f6;
+}
+
+.color-presets {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.color-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.2s;
+}
+
+.color-circle:hover, .color-circle.active {
+    transform: scale(1.15);
+    border-color: white;
+}
+
+/* TOAST MESSAGE */
+#toast {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #10b981;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    display: none;
+    z-index: 10000;
+}
+
+@media (max-width: 768px) {
+    .navbar { flex-direction: column; gap: 15px; align-items: flex-start; }
+    .nav-actions { width: 100%; justify-content: space-between; }
+    .albums-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+<nav class="navbar">
+    <div class="brand">
+        <span class="brand-icon">📖</span>
+        <h1>Flip Album Studio</h1>
+    </div>
+    <div class="nav-actions">
+        <span class="admin-badge" id="adminEmailBadge">Admin</span>
+        <button class="btn btn-primary" onclick="openCreateAlbumModal()">+ New Album</button>
+        <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+    </div>
+</nav>
+
+<!-- MAIN CONTAINER -->
+<main class="container">
+
+    <!-- 1. DASHBOARD & ALBUMS VIEW -->
+    <section id="albumsOverviewView">
+        <!-- STATS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📚</div>
+                <div class="stat-info">
+                    <h3 id="statTotalAlbums">0</h3>
+                    <p>Total Albums</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">🖼️</div>
+                <div class="stat-info">
+                    <h3 id="statTotalPhotos">0</h3>
+                    <p>Total Photos</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">⚡</div>
+                <div class="stat-info">
+                    <h3 id="statActiveAlbums">0</h3>
+                    <p>Active Flipbooks</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- HEADER -->
+        <div class="section-header">
+            <h2 class="section-title">Your Flip Albums</h2>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="albumSearchInput" placeholder="Search albums..." class="form-control" style="width: 220px; padding: 8px 14px;" oninput="filterAlbums()">
+                <button class="btn btn-secondary btn-sm" onclick="fetchAlbums()">↻ Refresh</button>
+            </div>
+        </div>
+
+        <!-- ALBUMS GRID -->
+        <div class="albums-grid" id="albumsGrid">
+            <!-- Loaded dynamically -->
+        </div>
+    </section>
+
+    <!-- 2. PHOTO MANAGEMENT VIEW -->
+    <section id="photoManagementView">
+        <div class="album-banner">
+            <div>
+                <button class="btn btn-secondary btn-sm" onclick="showAlbumsOverview()" style="margin-bottom: 8px;">⬅ Back to All Albums</button>
+                <h2 id="activeAlbumName" style="font-size: 22px; font-weight: 700;">Album Photos</h2>
+                <p id="activeAlbumSlug" style="color: #94a3b8; font-size: 13px;"></p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a id="btnPreviewActive" href="#" target="_blank" class="btn btn-secondary btn-sm">👁 View Public Album</a>
+                <button id="btnQrActive" class="btn btn-secondary btn-sm" onclick="showActiveQr()">📱 QR Code</button>
+            </div>
+        </div>
+
+        <!-- UPLOAD SECTION -->
+        <div class="upload-box" onclick="document.getElementById('multiImageInput').click()">
+            <input type="file" id="multiImageInput" multiple accept="image/*" onchange="handleImageSelection(event)">
+            <div style="font-size: 40px; margin-bottom: 10px;">📤</div>
+            <h3 style="font-size: 18px; margin-bottom: 6px;">Click or Drag & Drop Photos to Upload</h3>
+            <p style="color: #94a3b8; font-size: 13px;">Supports JPG, PNG, WEBP up to 20MB per photo (up to 100 photos per album)</p>
+            <div id="uploadProgress" style="display: none; margin-top: 15px; font-size: 14px; color: #60a5fa; font-weight: 500;"></div>
+        </div>
+
+        <!-- GALLERY SECTION -->
+        <div class="section-header">
+            <h3 style="font-size: 18px; font-weight: 600;">Album Pages (<span id="activePhotoCount">0</span>)</h3>
+            <button class="btn btn-success btn-sm" onclick="saveAllCaptions()">💾 Save Captions & Order</button>
+        </div>
+
+        <div class="photo-gallery" id="photoGallery">
+            <!-- Photos loaded dynamically -->
+        </div>
+    </section>
+
+</main>
+
+<!-- CREATE / EDIT ALBUM MODAL -->
+<div class="modal" id="albumModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="albumModalTitle">Create New Album</h3>
+            <button class="modal-close" onclick="closeModal('albumModal')">&times;</button>
+        </div>
+        <form id="albumForm" onsubmit="event.preventDefault(); saveAlbum();">
+            <input type="hidden" id="modalAlbumId">
+
+            <div class="form-group">
+                <label>Album Name *</label>
+                <input type="text" id="modalAlbumName" class="form-control" placeholder="e.g. Wedding Memories" required oninput="autoGenerateSlug()">
+            </div>
+
+            <div class="form-group">
+                <label>Public URL Slug * (e.g. /album/wedding-memories)</label>
+                <input type="text" id="modalAlbumSlug" class="form-control" placeholder="wedding-memories" required>
+            </div>
+
+            <div class="form-group">
+                <label>Display Title (Header)</label>
+                <input type="text" id="modalAlbumTitle" class="form-control" placeholder="e.g. Our Beautiful Wedding Day">
+            </div>
+
+            <div class="form-group">
+                <label>Subtitle / Date</label>
+                <input type="text" id="modalAlbumSubtitle" class="form-control" placeholder="e.g. 24 October 2026">
+            </div>
+
+            <div class="form-group">
+                <label>Theme & Background Style</label>
+                <select id="modalThemePreset" class="form-control" onchange="applyThemePreset(this.value)">
+                    <option value="birthday">Birthday Party (Colorful Gradient)</option>
+                    <option value="wedding">Wedding (Romantic Warm Gradient)</option>
+                    <option value="travel">Travel Adventure (Deep Ocean)</option>
+                    <option value="luxury">Luxury Minimal (Midnight Slate)</option>
+                    <option value="custom">Custom Color / Image</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="customBgGroup" style="display: none;">
+                <label>Custom Background Image URL or Color</label>
+                <input type="text" id="modalCustomBg" class="form-control" placeholder="https://... or #1e293b">
+            </div>
+
+            <div class="form-group">
+                <label>Accent Color</label>
+                <input type="color" id="modalPrimaryColor" value="#ff4757" style="width: 100%; height: 42px; border-radius: 8px; border: none; cursor: pointer;">
+            </div>
+
+            <div class="form-group">
+                <label>Loading Message</label>
+                <input type="text" id="modalLoaderText" class="form-control" value="Loading Memories...">
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px;">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('albumModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="btnSaveAlbum">Save Album</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- QR CODE MODAL -->
+<div class="modal" id="qrModal">
+    <div class="modal-content" style="text-align: center;">
+        <div class="modal-header">
+            <h3 class="modal-title" id="qrModalTitle">Album QR Code</h3>
+            <button class="modal-close" onclick="closeModal('qrModal')">&times;</button>
+        </div>
+        <div style="background: white; padding: 20px; border-radius: 16px; display: inline-block; margin-bottom: 20px;">
+            <img id="qrImage" src="" alt="Album QR Code" style="width: 250px; height: 250px; display: block;">
+        </div>
+        <p id="qrUrlText" style="color: #cbd5e1; font-size: 13px; word-break: break-all; margin-bottom: 20px; background: rgba(255,255,255,0.06); padding: 10px; border-radius: 8px;"></p>
+        <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-sm" onclick="copyQrUrl()">📋 Copy Link</button>
+            <button class="btn btn-success btn-sm" onclick="downloadQr()">⬇ Download QR</button>
+            <a id="qrOpenLink" href="#" target="_blank" class="btn btn-secondary btn-sm">👁 Open Album</a>
+        </div>
+    </div>
+</div>
+
+<div id="toast">Message</div>
+
+<script src="/config.js"></script>
+<script>
+/* =========================================================
+   AUTH & SESSION VERIFICATION
+========================================================= */
+const token = localStorage.getItem("token");
+if (!token) {
+    window.location.href = "/login";
+}
+
+const baseUrl = typeof API_BASE_URL !== "undefined" ? API_BASE_URL : "https://tirthas-bday.onrender.com";
+
+// Display admin email if stored
+try {
+    const userStr = localStorage.getItem("adminUser");
+    if (userStr) {
+        const user = JSON.parse(userStr);
+        document.getElementById("adminEmailBadge").textContent = user.email || user.name || "Admin";
+    }
+} catch (e) {}
+
+function authHeaders() {
+    return {
+        "Authorization": `Bearer ${token}`
+    };
+}
+
+function handleAuthError(res) {
+    if (res.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("adminUser");
+        alert("Your session has expired. Please log in again.");
+        window.location.href = "/login";
+        return true;
+    }
+    return false;
+}
+
+function showToast(msg, isSuccess = true) {
+    const toast = document.getElementById("toast");
+    toast.textContent = msg;
+    toast.style.background = isSuccess ? "#10b981" : "#ef4444";
+    toast.style.display = "block";
+    setTimeout(() => {
+        toast.style.display = "none";
+    }, 3000);
+}
+
+function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("adminUser");
+    window.location.href = "/login";
+}
+
+/* =========================================================
+   DATA STORAGE & STATE
+========================================================= */
+let allAlbums = [];
+let currentAlbum = null;
+let currentPhotos = [];
+
+/* =========================================================
+   ALBUM CRUD
+========================================================= */
+async function fetchAlbums() {
+    try {
+        const res = await fetch(`${baseUrl}/api/albums`, {
+            headers: authHeaders()
+        });
+
+        if (handleAuthError(res)) return;
+
+        const data = await res.json();
+        if (data.success) {
+            allAlbums = data.albums || [];
+            renderAlbums(allAlbums);
+            updateStats();
+        } else {
+            showToast(data.message || "Failed to load albums", false);
+        }
+    } catch (err) {
+        console.error("Fetch albums error:", err);
+        showToast("Error connecting to backend", false);
+    }
+}
+
+function updateStats() {
+    document.getElementById("statTotalAlbums").textContent = allAlbums.length;
+    const totalPhotos = allAlbums.reduce((sum, a) => sum + (a.photoCount || 0), 0);
+    document.getElementById("statTotalPhotos").textContent = totalPhotos;
+    const active = allAlbums.filter(a => a.status === "active").length;
+    document.getElementById("statActiveAlbums").textContent = active;
+}
+
+function renderAlbums(albumsToRender) {
+    const grid = document.getElementById("albumsGrid");
+    grid.innerHTML = "";
+
+    if (albumsToRender.length === 0) {
+        grid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 50px; background: rgba(255,255,255,0.02); border-radius: 16px;">
+                <p style="color: #94a3b8; margin-bottom: 15px;">No albums found</p>
+                <button class="btn btn-primary btn-sm" onclick="openCreateAlbumModal()">Create Your First Album</button>
+            </div>
+        `;
+        return;
+    }
+
+    albumsToRender.forEach(album => {
+        const card = document.createElement("div");
+        card.className = "album-card";
+
+        const coverHtml = album.coverImageUrl
+            ? `<img src="${album.coverImageUrl}" alt="${album.name}">`
+            : `<div class="album-cover-placeholder">📖</div>`;
+
+        const badgeText = album.isDefault ? "Default Album" : (album.status || "active");
+
+        card.innerHTML = `
+            <div class="album-cover">
+                ${coverHtml}
+                <span class="album-badge">${badgeText}</span>
+            </div>
+            <div class="album-body">
+                <h3 class="album-name">${album.name}</h3>
+                <p class="album-desc">${album.title || album.description || "Digital Flip Album"}</p>
+                <div class="album-meta">
+                    <span>📷 ${album.photoCount || 0} Photos</span>
+                    <span>🔗 /album/${album.slug}</span>
+                </div>
+                <div class="album-actions">
+                    <button class="btn btn-primary btn-sm" onclick="openPhotoManager('${album._id}')">🖼 Photos</button>
+                    <button class="btn btn-secondary btn-sm" onclick="openQrModal('${album.slug}', '${album.name.replace(/'/g, "\\'")}')">📱 QR Code</button>
+                    <button class="btn btn-secondary btn-sm" onclick="openEditAlbumModal('${album._id}')">✏ Edit</button>
+                    <a href="/album/${album.slug}" target="_blank" class="btn btn-secondary btn-sm">👁 Preview</a>
+                    ${album.isDefault ? '' : `<button class="btn btn-danger btn-sm" style="grid-column: 1/-1;" onclick="deleteAlbum('${album._id}', '${album.name.replace(/'/g, "\\'")}')">🗑 Delete Album</button>`}
+                </div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function filterAlbums() {
+    const q = document.getElementById("albumSearchInput").value.toLowerCase().trim();
+    const filtered = allAlbums.filter(a =>
+        a.name.toLowerCase().includes(q) ||
+        a.slug.toLowerCase().includes(q) ||
+        (a.title && a.title.toLowerCase().includes(q))
+    );
+    renderAlbums(filtered);
+}
+
+/* =========================================================
+   MODAL CONTROLS
+========================================================= */
+function openModal(id) {
+    document.getElementById(id).style.display = "flex";
+}
+
+function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+}
+
+function openCreateAlbumModal() {
+    document.getElementById("albumForm").reset();
+    document.getElementById("modalAlbumId").value = "";
+    document.getElementById("albumModalTitle").textContent = "Create New Album";
+    document.getElementById("btnSaveAlbum").textContent = "Create Album";
+    document.getElementById("customBgGroup").style.display = "none";
+    openModal("albumModal");
+}
+
+function autoGenerateSlug() {
+    const id = document.getElementById("modalAlbumId").value;
+    // Only auto-generate if creating new
+    if (!id) {
+        const name = document.getElementById("modalAlbumName").value;
+        const slug = name.toLowerCase().trim().replace(/[\s\W-]+/g, "-").replace(/^-+|-+$/g, "");
+        document.getElementById("modalAlbumSlug").value = slug;
+    }
+}
+
+function applyThemePreset(preset) {
+    const customGroup = document.getElementById("customBgGroup");
+    const primaryPicker = document.getElementById("modalPrimaryColor");
+
+    if (preset === "birthday") {
+        primaryPicker.value = "#ff4757";
+        customGroup.style.display = "none";
+    } else if (preset === "wedding") {
+        primaryPicker.value = "#d4af37";
+        customGroup.style.display = "none";
+    } else if (preset === "travel") {
+        primaryPicker.value = "#0ea5e9";
+        customGroup.style.display = "none";
+    } else if (preset === "luxury") {
+        primaryPicker.value = "#8b5cf6";
+        customGroup.style.display = "none";
+    } else if (preset === "custom") {
+        customGroup.style.display = "block";
+    }
+}
+
+function openEditAlbumModal(albumId) {
+    const album = allAlbums.find(a => a._id === albumId);
+    if (!album) return;
+
+    document.getElementById("modalAlbumId").value = album._id;
+    document.getElementById("modalAlbumName").value = album.name;
+    document.getElementById("modalAlbumSlug").value = album.slug;
+    document.getElementById("modalAlbumTitle").value = album.title || "";
+    document.getElementById("modalAlbumSubtitle").value = album.subtitle || "";
+    document.getElementById("modalLoaderText").value = album.theme?.loaderText || "Loading Memories...";
+    document.getElementById("modalPrimaryColor").value = album.theme?.primaryColor || "#ff4757";
+
+    const customBg = document.getElementById("modalCustomBg");
+    if (album.theme?.backgroundImage) {
+        customBg.value = album.theme.backgroundImage;
+        document.getElementById("modalThemePreset").value = "custom";
+        document.getElementById("customBgGroup").style.display = "block";
+    } else {
+        document.getElementById("customBgGroup").style.display = "none";
+    }
+
+    document.getElementById("albumModalTitle").textContent = "Edit Album Details";
+    document.getElementById("btnSaveAlbum").textContent = "Update Album";
+    openModal("albumModal");
+}
+
+async function saveAlbum() {
+    const id = document.getElementById("modalAlbumId").value;
+    const name = document.getElementById("modalAlbumName").value.trim();
+    const slug = document.getElementById("modalAlbumSlug").value.trim();
+    const title = document.getElementById("modalAlbumTitle").value.trim();
+    const subtitle = document.getElementById("modalAlbumSubtitle").value.trim();
+    const loaderText = document.getElementById("modalLoaderText").value.trim();
+    const primaryColor = document.getElementById("modalPrimaryColor").value;
+    const preset = document.getElementById("modalThemePreset").value;
+    const customBg = document.getElementById("modalCustomBg").value.trim();
+
+    let theme = {
+        primaryColor,
+        loaderText: loaderText || "Loading Memories..."
+    };
+
+    if (preset === "birthday") {
+        theme.backgroundType = "gradient";
+        theme.backgroundGradient = "linear-gradient(135deg, #0f172a, #1e293b, #111827)";
+    } else if (preset === "wedding") {
+        theme.backgroundType = "gradient";
+        theme.backgroundGradient = "linear-gradient(135deg, #2b1055, #7597de)";
+    } else if (preset === "travel") {
+        theme.backgroundType = "gradient";
+        theme.backgroundGradient = "linear-gradient(135deg, #022c43, #053f5c, #115173)";
+    } else if (preset === "luxury") {
+        theme.backgroundType = "gradient";
+        theme.backgroundGradient = "linear-gradient(135deg, #18181b, #27272a, #09090b)";
+    } else if (preset === "custom" && customBg) {
+        if (customBg.startsWith("http") || customBg.startsWith("/")) {
+            theme.backgroundType = "image";
+            theme.backgroundImage = customBg;
+        } else {
+            theme.backgroundType = "color";
+            theme.backgroundColor = customBg;
+        }
+    }
+
+    const payload = {
+        name,
+        slug,
+        title,
+        subtitle,
+        theme
+    };
+
+    try {
+        const method = id ? "PUT" : "POST";
+        const endpoint = id ? `${baseUrl}/api/albums/${id}` : `${baseUrl}/api/albums`;
+
+        const res = await fetch(endpoint, {
+            method,
+            headers: {
+                ...authHeaders(),
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (handleAuthError(res)) return;
+
+        const data = await res.json();
+        if (data.success) {
+            showToast(id ? "Album updated successfully" : "Album created successfully!");
+            closeModal("albumModal");
+            fetchAlbums();
+        } else {
+            alert(data.message || "Failed to save album");
+        }
+    } catch (err) {
+        console.error("Save album error:", err);
+        alert("Failed to connect to backend server");
+    }
+}
+
+async function deleteAlbum(id, name) {
+    if (!confirm(`Are you sure you want to delete the album "${name}" and all of its uploaded photos?\n\nThis action cannot be undone.`)) {
+        return;
+    }
+
+    try {
+        const res = await fetch(`${baseUrl}/api/albums/${id}`, {
+            method: "DELETE",
+            headers: authHeaders()
+        });
+
+        if (handleAuthError(res)) return;
+
+        const data = await res.json();
+        if (data.success) {
+            showToast(data.message || "Album deleted successfully");
+            fetchAlbums();
+        } else {
+            alert(data.message || "Delete failed");
+        }
+    } catch (err) {
+        console.error("Delete album error:", err);
+        alert("Server error deleting album");
+    }
+}
+
+/* =========================================================
+   PHOTO MANAGEMENT
+========================================================= */
+async function openPhotoManager(albumId) {
+    currentAlbum = allAlbums.find(a => a._id === albumId);
+    if (!currentAlbum) return;
+
+    document.getElementById("activeAlbumName").textContent = currentAlbum.name;
+    document.getElementById("activeAlbumSlug").textContent = `Public URL: /album/${currentAlbum.slug}`;
+    document.getElementById("btnPreviewActive").href = `/album/${currentAlbum.slug}`;
+
+    document.getElementById("albumsOverviewView").style.display = "none";
+    document.getElementById("photoManagementView").style.display = "block";
+
+    await fetchAlbumPhotos(currentAlbum._id);
+}
+
+function showAlbumsOverview() {
+    document.getElementById("photoManagementView").style.display = "none";
+    document.getElementById("albumsOverviewView").style.display = "block";
+    fetchAlbums(); // refresh stats
+}
+
+async function fetchAlbumPhotos(albumId) {
+    try {
+        const res = await fetch(`${baseUrl}/api/albums/${albumId}/images`);
+        const photos = await res.json();
+        currentPhotos = Array.isArray(photos) ? photos : [];
+        renderPhotoGallery(currentPhotos);
+    } catch (err) {
+        console.error("Fetch photos error:", err);
+        showToast("Error loading photos", false);
+    }
+}
+
+function renderPhotoGallery(photos) {
+    const gallery = document.getElementById("photoGallery");
+    gallery.innerHTML = "";
+    document.getElementById("activePhotoCount").textContent = photos.length;
+
+    if (photos.length === 0) {
+        gallery.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">
+                <p>No photos uploaded to this album yet. Select or drop photos above!</p>
+            </div>
+        `;
+        return;
+    }
+
+    photos.forEach((photo, index) => {
+        const card = document.createElement("div");
+        card.className = "photo-card";
+        card.innerHTML = `
+            <div class="photo-thumb">
+                <span class="page-num">Page ${index + 1}</span>
+                <img src="${photo.imageUrl}" alt="Page ${index + 1}">
+            </div>
+            <div class="photo-details">
+                <input type="text" class="caption-input" placeholder="Add caption..." value="${photo.caption || ''}" id="caption-${photo._id}">
+                <div class="photo-controls">
+                    <div>
+                        <button class="btn btn-secondary btn-sm" onclick="movePhoto(${index}, -1)" ${index === 0 ? 'disabled' : ''}>↑</button>
+                        <button class="btn btn-secondary btn-sm" onclick="movePhoto(${index}, 1)" ${index === photos.length - 1 ? 'disabled' : ''}>↓</button>
+                    </div>
+                    <button class="btn btn-danger btn-sm" onclick="deletePhoto('${photo._id}')">✖</button>
+                </div>
+            </div>
+        `;
+        gallery.appendChild(card);
+    });
+}
+
+async function handleImageSelection(e) {
+    const files = Array.from(e.target.files);
+    if (files.length === 0 || !currentAlbum) return;
+
+    const progressEl = document.getElementById("uploadProgress");
+    progressEl.style.display = "block";
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        progressEl.textContent = `Uploading photo ${i + 1} of ${files.length}...`;
+
+        const formData = new FormData();
+        formData.append("image", file);
+        formData.append("albumId", currentAlbum._id);
+        formData.append("order", currentPhotos.length + i);
+
+        try {
+            const res = await fetch(`${baseUrl}/api/upload`, {
+                method: "POST",
+                headers: authHeaders(),
+                body: formData
+            });
+
+            if (handleAuthError(res)) return;
+        } catch (err) {
+            console.error("Upload error:", err);
+        }
+    }
+
+    progressEl.style.display = "none";
+    e.target.value = "";
+    showToast(`Uploaded ${files.length} photos!`);
+    await fetchAlbumPhotos(currentAlbum._id);
+}
+
+function movePhoto(index, direction) {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= currentPhotos.length) return;
+
+    const temp = currentPhotos[index];
+    currentPhotos[index] = currentPhotos[targetIndex];
+    currentPhotos[targetIndex] = temp;
+
+    renderPhotoGallery(currentPhotos);
+}
+
+async function saveAllCaptions() {
+    if (!currentAlbum || currentPhotos.length === 0) return;
+
+    // Collect updated captions and orders
+    const items = currentPhotos.map((photo, index) => {
+        const captionInput = document.getElementById(`caption-${photo._id}`);
+        return {
+            id: photo._id,
+            order: index,
+            caption: captionInput ? captionInput.value.trim() : photo.caption || ""
+        };
+    });
+
+    try {
+        // 1. Reorder
+        const resReorder = await fetch(`${baseUrl}/api/images/reorder`, {
+            method: "PUT",
+            headers: {
+                ...authHeaders(),
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ items })
+        });
+
+        if (handleAuthError(resReorder)) return;
+
+        // 2. Update individual captions if changed
+        for (const item of items) {
+            await fetch(`${baseUrl}/api/images/${item.id}`, {
+                method: "PUT",
+                headers: {
+                    ...authHeaders(),
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ caption: item.caption, order: item.order })
+            });
+        }
+
+        showToast("Arrangement and captions saved!");
+        await fetchAlbumPhotos(currentAlbum._id);
+    } catch (err) {
+        console.error("Save error:", err);
+        showToast("Failed to save changes", false);
+    }
+}
+
+async function deletePhoto(photoId) {
+    if (!confirm("Are you sure you want to delete this photo?")) return;
+
+    try {
+        const res = await fetch(`${baseUrl}/api/images/${photoId}`, {
+            method: "DELETE",
+            headers: authHeaders()
+        });
+
+        if (handleAuthError(res)) return;
+
+        const data = await res.json();
+        if (data.success) {
+            showToast("Photo deleted");
+            await fetchAlbumPhotos(currentAlbum._id);
+        } else {
+            alert(data.error || "Delete failed");
+        }
+    } catch (err) {
+        console.error("Delete photo error:", err);
+    }
+}
+
+/* =========================================================
+   QR CODE MODAL
+========================================================= */
+let activeQrPublicUrl = "";
+
+async function openQrModal(slug, name) {
+    try {
+        const res = await fetch(`${baseUrl}/api/albums/${slug}/qr`);
+        const data = await res.json();
+
+        if (data.success) {
+            document.getElementById("qrModalTitle").textContent = `${name} - QR Code`;
+            document.getElementById("qrImage").src = data.qrCodeDataUrl;
+            document.getElementById("qrUrlText").textContent = data.publicUrl;
+            document.getElementById("qrOpenLink").href = data.publicUrl;
+            activeQrPublicUrl = data.publicUrl;
+            openModal("qrModal");
+        } else {
+            alert(data.message || "Failed to generate QR code");
+        }
+    } catch (err) {
+        console.error("QR Error:", err);
+        alert("Failed to load QR code");
+    }
+}
+
+function showActiveQr() {
+    if (currentAlbum) {
+        openQrModal(currentAlbum.slug, currentAlbum.name);
+    }
+}
+
+function copyQrUrl() {
+    if (activeQrPublicUrl) {
+        navigator.clipboard.writeText(activeQrPublicUrl).then(() => {
+            showToast("Public album link copied to clipboard!");
+        });
+    }
+}
+
+function downloadQr() {
+    const img = document.getElementById("qrImage");
+    if (!img.src) return;
+    const a = document.createElement("a");
+    a.href = img.src;
+    a.download = `album-qr-code.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+// Initial fetch
+fetchAlbums();
+</script>
+
+</body>
+</html>

@@ -45,7 +45,7 @@ async function login() {
             message.style.color = "#2ecc71";
 
             setTimeout(() => {
-                window.location.href = "admin.html";
+                window.location.href = "/admin";
             }, 800);
         } else {
             message.innerHTML = data.message || "Invalid credentials";
